@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/cover/cover",
+    "pages/toc/toc",
+    "pages/reader/reader"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundTextStyle": "dark",
+    "backgroundColor": "#fdfaf3"
+  },
+  "darkmode": true,
+  "themeLocation": "theme.json"
+}
