@@ -1,0 +1,38 @@
+{
+  "light": {
+    "bg": "#fdfaf3",
+    "bg2": "#f5f0e8",
+    "text": "#2c2416",
+    "text2": "#5c4a2e",
+    "accent": "#c4843a",
+    "accent2": "#7a3a1a",
+    "card": "#fffbf5",
+    "border": "#e0d5c0",
+    "highlight": "#fef3c7",
+    "ttsHighlight": "#fbbf24",
+    "navBg": "rgba(253,250,243,0.95)",
+    "shadow": "0 2px 12px rgba(0,0,0,0.08)",
+    "skeletonBase": "#e8e0d0",
+    "skeletonShine": "#f0e8d8",
+    "noteBadge": "#d4945a",
+    "coverBg": "linear-gradient(135deg, #8B4513 0%, #A0522D 30%, #D2691E 60%, #CD853F 100%)"
+  },
+  "dark": {
+    "bg": "#1a1a2e",
+    "bg2": "#16213e",
+    "text": "#e0d7c6",
+    "text2": "#a09080",
+    "accent": "#d4945a",
+    "accent2": "#e0a070",
+    "card": "#1f2940",
+    "border": "#2a3550",
+    "highlight": "#3a3520",
+    "ttsHighlight": "#b8860b",
+    "navBg": "rgba(26,26,46,0.95)",
+    "shadow": "0 2px 12px rgba(0,0,0,0.3)",
+    "skeletonBase": "#2a3550",
+    "skeletonShine": "#354060",
+    "noteBadge": "#e0a070",
+    "coverBg": "linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 30%, #2a1a0a 60%, #1a0a00 100%)"
+  }
+}
