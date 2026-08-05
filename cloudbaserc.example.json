@@ -1,0 +1,32 @@
+{
+  "envId": "<你的云开发环境ID>",
+  "functions": [
+    {
+      "name": "ai_qa",
+      "timeout": 60,
+      "runtime": "Nodejs20.19",
+      "envVariables": {
+        "TOKENHUB_API_KEY": "<你的API密钥>"
+      }
+    },
+    {
+      "name": "get_data",
+      "timeout": 10,
+      "runtime": "Nodejs20.19"
+    },
+    {
+      "name": "tts",
+      "timeout": 30,
+      "runtime": "Nodejs20.19",
+      "envVariables": {
+        "TENCENT_SECRET_ID": "<你的SecretId>",
+        "TENCENT_SECRET_KEY": "<你的SecretKey>"
+      }
+    },
+    {
+      "name": "gen_content",
+      "timeout": 120,
+      "runtime": "Nodejs20.19"
+    }
+  ]
+}
