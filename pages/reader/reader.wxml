@@ -1,0 +1,224 @@
+<view class="reader-root {{fontSizeClass}} {{lineSpacingClass}} {{isDark ? 'dark-manual' : ''}}">
+<wxs src="./reader-utils.wxs" module="U" />
+
+<!-- 状态栏占位 -->
+<view class="status-bar"></view>
+
+<!-- 导航栏 -->
+<view class="nav-bar">
+  <view class="nav-left">
+    <button class="nav-btn" bindtap="backToTOC">☰</button>
+    <text class="nav-title">{{chapter && chapter.title || '预测之书'}}</text>
+  </view>
+  <view class="nav-right">
+    <button class="nav-btn" bindtap="cycleFontSize">Aa</button>
+    <button class="nav-btn" bindtap="cycleLineSpacing">↕</button>
+    <button class="nav-btn" bindtap="toggleDark">{{isDark ? '☀' : '🌙'}}</button>
+  </view>
+</view>
+
+<!-- 骨架屏 -->
+<view wx:if="{{loading}}" class="skeleton-wrap">
+  <view class="skeleton skeleton-title"></view>
+  <view class="skeleton skeleton-author"></view>
+  <view class="skeleton skeleton-summary"></view>
+  <view class="skeleton skeleton-line"></view>
+  <view class="skeleton skeleton-line medium"></view>
+  <view class="skeleton skeleton-line"></view>
+  <view class="skeleton skeleton-line short"></view>
+  <view class="skeleton skeleton-line"></view>
+  <view class="skeleton skeleton-line medium"></view>
+</view>
+
+<!-- 阅读区 -->
+<scroll-view wx:else scroll-y class="reader-scroll" enhanced
+  scroll-top="{{scrollTop}}" scroll-with-animation
+  bindscroll="onScroll">
+  <!-- 章节头部 -->
+  <view class="chapter-header">
+    <text class="ch-title">{{chapter.title}}</text>
+    <text class="ch-author">{{chapter.author}}</text>
+  </view>
+
+  <!-- 摘要卡片 -->
+  <view wx:if="{{cleanSummary}}" class="summary-card">
+    <text>{{cleanSummary}}</text>
+  </view>
+
+  <!-- 模式切换 -->
+  <view class="mode-switch">
+    <button class="mode-btn {{currentMode === 'sentence' ? 'active' : ''}}" bindtap="switchMode" data-mode="sentence">逐句阅读</button>
+    <button class="mode-btn {{currentMode === 'continuous' ? 'active' : ''}}" bindtap="switchMode" data-mode="continuous">连续阅读</button>
+  </view>
+
+  <!-- 图片 -->
+  <view wx:if="{{images.length > 0}}" class="image-gallery">
+    <view wx:for="{{images}}" wx:key="*this" class="img-item" bindtap="previewImage" data-src="{{imgBaseUrl}}/{{item}}">
+      <image src="{{imgBaseUrl}}/{{item}}" mode="widthFix" class="gallery-img" lazy-load></image>
+    </view>
+  </view>
+
+  <!-- 逐句模式 -->
+  <view wx:if="{{currentMode === 'sentence'}}" class="sentence-container">
+    <view wx:for="{{sentences}}" wx:key="index"
+      class="sent-block {{ttsIdx === index ? 'tts-active' : ''}} {{U.includes(bookmarkSet, index) ? 'bookmarked' : ''}} {{U.includes(noteIdxSet, index) ? 'has-note' : ''}}"
+      id="sent-{{index}}" data-idx="{{index}}"
+      bindtap="onSentenceTap"
+      bindlongpress="onSentenceLongPress">
+      <text class="sent-text">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 连续模式 -->
+  <view wx:else class="continuous-container">
+    <block wx:for="{{paragraphs}}" wx:key="start" wx:for-item="para">
+      <view class="cont-para">
+        <block wx:for="{{sentences}}" wx:key="index" wx:for-item="s" wx:for-index="si">
+          <text wx:if="{{si >= para.start && si < para.end}}"
+            class="cont-sent {{ttsIdx === si ? 'tts-active' : ''}} {{U.includes(bookmarkSet, si) ? 'cont-bookmarked' : ''}} {{U.includes(noteIdxSet, si) ? 'cont-has-note' : ''}}"
+            data-idx="{{si}}"
+            bindtap="onContinuousTap"
+            bindlongpress="onSentenceLongPress">{{s}}</text>
+        </block>
+      </view>
+    </block>
+  </view>
+
+  <!-- 底部占位 -->
+  <view style="height:240rpx;"></view>
+</scroll-view>
+
+<!-- 底部 TTS 播放条 -->
+<view wx:if="{{chapter && ttsBarVisible}}" class="tts-bar">
+  <view class="tts-progress-bar" style="width: {{ttsProgressPercent}}%;"></view>
+  <slider class="tts-slider" min="0" max="{{ttsTotal}}" value="{{ttsIdx + 1}}" block-size="14" activeColor="var(--accent)"
+    backgroundColor="rgba(255,255,255,0.15)" bindchange="ttsSeek" />
+  <button class="tts-sidebar-btn" bindtap="toggleSidebar" data-tab="bookmarks">🔖</button>
+  <button class="tts-sidebar-btn" bindtap="toggleSidebar" data-tab="notes">📝</button>
+  <button class="tts-play-btn" bindtap="ttsToggle">{{ttsPlaying ? '⏸' : '▶'}}</button>
+  <text class="tts-preview">{{ttsPreview}}</text>
+  <button class="tts-ctrl-btn" bindtap="ttsPrev">⏮</button>
+  <button class="tts-ctrl-btn" bindtap="ttsNext">⏭</button>
+  <text class="tts-progress-text">{{ttsIdx + 1}}/{{ttsTotal}}</text>
+  <button class="tts-ctrl-btn" bindtap="ttsStop">⏹</button>
+</view>
+
+<!-- 浮动按钮 -->
+<view wx:if="{{chapter && !loading}}" class="fab">
+  <button class="fab-btn tts-fab-btn {{ttsPlaying ? 'playing' : ''}}" bindtap="ttsToggle">{{ttsPlaying ? '⏸' : '🔊'}}</button>
+  <button class="fab-btn" bindtap="toggleAIPanel">🤖</button>
+</view>
+
+<!-- ==================== 底部抽屉：书签/笔记列表 ==================== -->
+<view wx:if="{{sidebarOpen}}" class="sidebar-mask" bindtap="closeSidebar"></view>
+
+<view class="bottom-sheet {{sidebarOpen ? 'open' : ''}}">
+  <!-- 拖拽手柄 -->
+  <view class="sheet-handle"><view class="sheet-handle-bar"></view></view>
+
+  <view class="sheet-tabs">
+    <button class="sheet-tab {{sidebarTab === 'bookmarks' ? 'active' : ''}}" bindtap="switchSidebarTab" data-tab="bookmarks">书签</button>
+    <button class="sheet-tab {{sidebarTab === 'notes' ? 'active' : ''}}" bindtap="switchSidebarTab" data-tab="notes">笔记</button>
+  </view>
+
+  <scroll-view scroll-y class="sheet-content" enhanced>
+
+    <!-- 书签面板 -->
+    <view wx:if="{{sidebarTab === 'bookmarks'}}">
+      <block wx:if="{{bookmarkList.length > 0}}">
+        <view wx:for="{{bookmarkList}}" wx:key="key" class="sheet-item {{swipedKey === item.key ? 'swiped' : ''}}"
+          bindtouchstart="onSwipeStart" bindtouchmove="onSwipeMove" bindtouchend="onSwipeEnd"
+          data-key="{{item.key}}" data-idx="{{item.idx}}">
+          <view class="sheet-item-inner" bindtap="jumpToSentence" data-idx="{{item.idx}}">
+            <text class="sheet-item-title">{{item.chTitle}}</text>
+            <text class="sheet-item-meta">第{{item.idx + 1}}句</text>
+          </view>
+          <view class="sheet-item-del" catchtap="removeBookmarkItem" data-key="{{item.key}}">删除</view>
+        </view>
+      </block>
+      <text wx:else class="sidebar-empty">暂无书签</text>
+    </view>
+
+    <!-- 笔记面板 -->
+    <view wx:if="{{sidebarTab === 'notes'}}">
+      <block wx:if="{{noteList.length > 0}}">
+        <view wx:for="{{noteList}}" wx:key="key" class="sheet-item {{swipedKey === item.key ? 'swiped' : ''}}"
+          bindtouchstart="onSwipeStart" bindtouchmove="onSwipeMove" bindtouchend="onSwipeEnd"
+          data-key="{{item.key}}" data-idx="{{item.idx}}">
+          <view class="sheet-item-inner" bindtap="jumpToSentence" data-idx="{{item.idx}}">
+            <text class="sheet-item-title">{{item.chTitle}} - 第{{item.idx + 1}}句</text>
+            <text class="sheet-item-meta">{{item.preview}}</text>
+          </view>
+          <view class="sheet-item-del" catchtap="removeNoteItem" data-key="{{item.key}}">删除</view>
+        </view>
+      </block>
+      <text wx:else class="sidebar-empty">暂无笔记</text>
+    </view>
+
+  </scroll-view>
+</view>
+
+<!-- ==================== 长按操作菜单 (ActionSheet) ==================== -->
+<view wx:if="{{actionSheetOpen}}" class="sheet-mask" bindtap="closeActionSheet"></view>
+<view class="action-sheet {{actionSheetOpen ? 'open' : ''}}">
+  <view class="action-sheet-header">
+    <text class="action-sheet-preview">{{actionSheetText}}</text>
+  </view>
+  <view class="action-sheet-actions">
+    <button class="action-sheet-btn" bindtap="actionSheetBookmark">
+      <text class="action-sheet-icon">{{actionSheetBookmarked ? '🔖' : '☆'}}</text>
+      <text>{{actionSheetBookmarked ? '取消书签' : '添加书签'}}</text>
+    </button>
+    <button class="action-sheet-btn" bindtap="actionSheetNote">
+      <text class="action-sheet-icon">📝</text>
+      <text>{{actionSheetHasNote ? '编辑笔记' : '添加笔记'}}</text>
+    </button>
+    <button class="action-sheet-btn" bindtap="actionSheetAI">
+      <text class="action-sheet-icon">🤖</text>
+      <text>AI 问答</text>
+    </button>
+  </view>
+  <button class="action-sheet-cancel" bindtap="closeActionSheet">取消</button>
+</view>
+
+<!-- ==================== 底部半屏笔记编辑器 ==================== -->
+<view wx:if="{{noteEditorOpen}}" class="sheet-mask" bindtap="closeNoteEditor"></view>
+<view class="note-editor-sheet {{noteEditorOpen ? 'open' : ''}}">
+  <view class="note-editor-handle"><view class="note-editor-handle-bar"></view></view>
+  <view class="note-editor-header">
+    <text class="note-editor-title">笔记编辑</text>
+    <text class="note-editor-context">第{{noteEditIdx + 1}}句</text>
+    <button class="note-editor-close" bindtap="closeNoteEditor">✕</button>
+  </view>
+  <view class="note-editor-quote">{{noteEditText}}</view>
+  <textarea class="note-editor-textarea" value="{{noteEditContent}}" placeholder="输入你的笔记…"
+    bindinput="onNoteInput" auto-height focus="{{noteEditorOpen}}" />
+  <view class="note-editor-actions">
+    <button class="note-editor-btn note-btn-cancel" bindtap="closeNoteEditor">取消</button>
+    <button class="note-editor-btn note-btn-save" bindtap="saveNote">保存</button>
+  </view>
+</view>
+
+<!-- AI 面板 -->
+<view class="ai-panel {{aiPanelOpen ? 'open' : ''}}">
+  <view class="ai-header" bindtap="toggleAIPanel">
+    <text class="ai-header-title">AI 问答助手</text>
+    <view class="ai-header-right">
+      <text class="ai-arrow">▲</text>
+    </view>
+  </view>
+  <view class="ai-input-area">
+    <input class="ai-input" placeholder="基于当前章节内容提问…" value="{{aiInputValue}}" bindinput="onAIInput" confirm-type="send" bindconfirm="aiAsk" />
+    <button class="ai-send-btn" bindtap="aiAsk">发送</button>
+  </view>
+  <scroll-view wx:if="{{aiResponse}}" scroll-y class="ai-response">{{aiResponse}}</scroll-view>
+  <text wx:if="{{aiLoading}}" class="ai-loading">思考中…</text>
+  <view wx:if="{{!aiResponse && !aiLoading}}" class="ai-guide">
+    <text>基于当前章节内容，输入你的问题，AI 为你解答。</text>
+  </view>
+</view>
+
+<!-- Toast -->
+<view wx:if="{{toastVisible}}" class="toast">{{toastMsg}}</view>
+
+</view>

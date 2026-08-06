@@ -1,0 +1,215 @@
+/* 状态栏占位 */
+.status-bar {
+  height: var(--status-bar-height, 44px);
+  width: 100%;
+  background: var(--navBg);
+}
+
+/* 导航栏 */
+.nav-bar {
+  height: 88rpx;
+  background: var(--navBg);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: var(--accent2);
+}
+
+/* 内容区 */
+.toc-scroll {
+  height: calc(100vh - var(--status-bar-height, 44px) - 88rpx);
+  padding: 0 40rpx 60rpx;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* 加载与错误 */
+.loading {
+  text-align: center;
+  padding: 120rpx 0;
+  color: var(--text2);
+  font-size: 30rpx;
+}
+
+.error-box {
+  text-align: center;
+  padding: 120rpx 40rpx;
+  max-width: 640rpx;
+  margin: 0 auto;
+}
+
+.error-title {
+  display: block;
+  font-size: 44rpx;
+  color: var(--accent2);
+  margin-bottom: 32rpx;
+}
+
+.error-msg {
+  display: block;
+  color: var(--text2);
+  font-size: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.error-hint {
+  display: block;
+  font-size: 24rpx;
+  color: var(--text2);
+  margin-top: 32rpx;
+  word-break: break-all;
+}
+
+.retry-btn {
+  display: inline-block;
+  margin-top: 24rpx;
+  padding: 16rpx 48rpx;
+  border: 1px solid var(--accent);
+  border-radius: 40rpx;
+  color: var(--accent);
+  font-size: 28rpx;
+  background: none;
+  font-family: inherit;
+}
+
+/* 头部 */
+.toc-header {
+  text-align: center;
+  padding: 60rpx 0 40rpx;
+}
+
+.toc-title {
+  display: block;
+  font-size: 48rpx;
+  font-weight: bold;
+  color: var(--accent2);
+  margin-bottom: 16rpx;
+}
+
+.toc-editor {
+  display: block;
+  color: var(--text2);
+  font-size: 28rpx;
+}
+
+/* 恢复阅读卡片 */
+.restore-card {
+  text-align: center;
+  margin-bottom: 48rpx;
+  padding: 24rpx;
+  background: var(--card);
+  border-radius: 16rpx;
+  border: 1px solid var(--border);
+}
+
+.restore-text {
+  display: block;
+  color: var(--accent);
+  font-size: 30rpx;
+}
+
+.restore-hint {
+  display: block;
+  color: var(--text2);
+  font-size: 24rpx;
+  margin-top: 8rpx;
+}
+
+/* 幕 */
+.act-section {
+  margin-bottom: 48rpx;
+}
+
+.act-title {
+  font-size: 36rpx;
+  color: var(--accent2);
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 20rpx;
+  margin-bottom: 24rpx;
+  font-weight: bold;
+}
+
+/* 目录项 */
+.toc-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 20rpx 24rpx;
+  border-bottom: 1px solid var(--border);
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.toc-item:active {
+  background: var(--highlight);
+}
+
+.toc-left {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.toc-ch-title {
+  display: block;
+  font-size: 30rpx;
+  color: var(--text);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toc-meta {
+  font-size: 24rpx;
+  color: var(--text2);
+  margin-top: 6rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.toc-summary-line {
+  display: block;
+  font-size: 24rpx;
+  color: var(--text2);
+  margin-top: 8rpx;
+  line-height: 1.6;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  opacity: 0.6;
+}
+
+.toc-summary {
+  opacity: 0.6;
+}
+
+.toc-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.toc-author {
+  color: var(--text2);
+  font-size: 26rpx;
+  white-space: nowrap;
+  max-width: 120rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-progress {
+  font-size: 24rpx;
+  color: var(--accent);
+  font-weight: 500;
+  white-space: nowrap;
+}

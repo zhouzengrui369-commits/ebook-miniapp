@@ -1,0 +1,51 @@
+<!-- 状态栏占位 -->
+<view class="status-bar"></view>
+
+<!-- 自定导航栏 -->
+<view class="nav-bar">
+  <text class="nav-title">预测之书</text>
+</view>
+
+<!-- 加载中 -->
+<view wx:if="{{loading}}" class="loading">加载中…</view>
+
+<!-- 错误 -->
+<view wx:elif="{{error}}" class="error-box">
+  <text class="error-title">预测之书</text>
+  <text class="error-msg">{{error}}</text>
+  <button class="retry-btn" bindtap="init">重试连接</button>
+  <text class="error-hint">{{errorDetail}}</text>
+</view>
+
+<!-- 目录内容 -->
+<scroll-view wx:else scroll-y class="toc-scroll" enhanced show-scrollbar="{{false}}">
+  <view class="toc-header">
+    <text class="toc-title">{{indexData.title}}</text>
+    <text class="toc-editor">{{indexData.editor}} 编 · {{indexData.total_chapters}}篇文章</text>
+  </view>
+
+  <!-- 上次阅读恢复 -->
+  <view wx:if="{{restoreProgress}}" class="restore-card" bindtap="restoreReading">
+    <text class="restore-text">上次阅读：{{restoreChapterTitle}} (第{{restoreSentenceIdx}}句)</text>
+    <text class="restore-hint">点击继续</text>
+  </view>
+
+  <!-- 按幕分组 -->
+  <view wx:for="{{indexData.acts}}" wx:key="name" class="act-section">
+    <view class="act-title">{{item.name}}</view>
+    <view wx:for="{{item.chapters}}" wx:key="id" wx:for-item="ch"
+      class="toc-item" data-id="{{ch.id}}" bindtap="loadChapter">
+      <view class="toc-left">
+        <text class="toc-ch-title">{{ch.title}}</text>
+        <view class="toc-meta">
+          <text>{{ch.author}}</text>
+        </view>
+        <text wx:if="{{ch.summarySnippet}}" class="toc-summary-line">{{ch.summarySnippet}}</text>
+      </view>
+      <view class="toc-right">
+        <text class="toc-author">{{ch.author}}</text>
+        <text wx:if="{{ch.progress}}" class="toc-progress">{{ch.progress}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

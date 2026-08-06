@@ -1,0 +1,19 @@
+// reader-utils.wxs — 模板辅助函数，供 reader.wxml 中数据驱动表达式使用
+
+/**
+ * 检查数组中是否包含指定元素
+ * @param {Array} arr - 数组
+ * @param {*} item - 要检查的元素
+ * @returns {Boolean}
+ */
+function includes(arr, item) {
+  if (!arr) return false;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] === item) return true;
+  }
+  return false;
+}
+
+module.exports = {
+  includes: includes
+};

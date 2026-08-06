@@ -1,0 +1,8 @@
+<view class="cover" bindtap="openTOC">
+  <view class="cover-content">
+    <text class="cover-title">预测之书\n1000天后的世界</text>
+    <text class="cover-subtitle">罗振宇 编</text>
+    <text class="cover-subtitle-2">37位作者 · 六幕大戏</text>
+  </view>
+  <text class="cover-hint">点击任意位置进入</text>
+</view>
