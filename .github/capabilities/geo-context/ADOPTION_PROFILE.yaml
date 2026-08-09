@@ -1,0 +1,48 @@
+capability_id: geo-context
+adoption_mode: OPTIONAL
+execution_owner: ebook-miniapp-project-pm
+execution_mode: PROJECT_PM_OWNED
+current_release_scope: NO_RUNTIME_SCOPE
+runtime_implementation: false
+planned_goal: EBOOK-STORY-ATLAS-R1
+program_plan: docs/EBOOK_STORY_ATLAS_R1.md
+central_candidate:
+  repository: zhouzengrui369-commits/knowme-ecosystem
+  commit: 6edb5401084de24491038ac55525f584e9943bd7
+  schema_sha256: 8695f3d9d376bf5591138d78b1460c17758845312aeca52a4a0597ee873032df
+activate_when:
+  - named_book_or_story_requires_geographic_comprehension
+  - location_or_route_visualization_materially_improves_reader_value
+  - project_pm_promotes_to_active_goal
+possible_use_cases:
+  - history_and_travel_atlas
+  - aviation_geography
+  - fictional_world_or_character_migration_map
+output_strategy:
+  primary: lightweight_2d_or_static
+  three_d: separate_post_acceptance_gate_only
+project_pm_responsibilities:
+  - validate_real_content_need
+  - create_goal_task_plan_result_evidence_chain
+  - assign_implementation_workers
+  - own_content_adapter_and_reader_ui
+  - freeze_exact_product_candidate
+  - assign_target_runtime_device_testing
+  - assign_independent_reading_product_review
+  - create_successor_candidates_for_findings
+  - hand_customer_value_gate_to_human_owner
+milestones:
+  - M0_CONTENT_BASELINE_AND_ACTIVATION
+  - M1_CONTENT_TO_GEOSCENE_ADAPTER
+  - M2_2D_STATIC_ATLAS_READING_FLOW
+  - M3_OFFLINE_MOBILE_HARDENING
+  - M4_OPTIONAL_AI_QA_ATLAS_CONTEXT
+  - M5_EXACT_SHA_PRODUCT_ACCEPTANCE
+  - M6_INDEPENDENT_READING_REVIEW
+  - M7_OPTIONAL_3D_GATE
+  - M8_HUMAN_OWNER_DELIVERY
+constraints:
+  - do_not_add_map_dependencies_without_named_content_need
+  - no_device_location_permission_for_book_geography_by_default
+  - no_direct_upstream_GPL_source_templates_assets
+  - no_speculative_runtime_from_planning_pr
