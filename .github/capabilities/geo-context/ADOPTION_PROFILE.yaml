@@ -1,0 +1,21 @@
+capability_id: geo-context
+adoption_mode: OPTIONAL
+current_release_scope: NO_RUNTIME_SCOPE
+runtime_implementation: false
+planned_goal: EBOOK-STORY-ATLAS-R1
+central_candidate:
+  commit: 6edb5401084de24491038ac55525f584e9943bd7
+  schema_sha256: 8695f3d9d376bf5591138d78b1460c17758845312aeca52a4a0597ee873032df
+activate_when:
+  - a real book/story requires geographic narrative or knowledge atlas
+  - location/route visualization materially improves comprehension
+possible_use_cases:
+  - history and travel atlas
+  - aviation or military geography
+  - fictional world/person migration map
+output_strategy:
+  primary: lightweight_2d_or_static
+  three_d: only_when_content_value_justifies_cost
+constraints:
+  - do not add map dependencies to the current reader/TTS/AI scope without a real content requirement
+  - no direct upstream GPL source/templates/assets
